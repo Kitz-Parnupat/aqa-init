@@ -1,0 +1,295 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../components/aqa-title/aqa-title-name.html">
+<link rel="import" href="../../layout/flexbox-grid.html">
+<link rel="import" href="../../layout/shared-styles.html">
+<link rel="import" href="../../components/aqa-form/aqa-combo-box.html">
+<link rel="import" href="../../components/aqa-panel/aqa-panel.html">
+<link rel="import" href="../../components/aqa-button/aqa-button.html">
+<link rel="import" href="../../components/aqa-form/aqa-input.html">
+
+<link rel="import" href="../../../bower_components/paper-dialog/paper-dialog.html">
+
+<link rel="import" href="../../components/aqa-lightbox/aqa-lightbox.html">
+
+<link rel="import" href="../../../bower_components/iron-image/iron-image.html">
+
+
+<dom-module id="page-bank">
+    <template>
+        <style include="flexbox-grid shared-styles">
+            .upload-area {
+                background-color: #e4eaec;
+                display: flex;
+                margin: 0.5rem;
+                border: 1px solid #e4eaec;
+                border-radius: 0.2rem;
+            }
+
+            #output_image {
+                width: 100%;
+                height: auto;
+                max-width: 200px;
+                max-height: auto;
+                margin: 0 auto;
+            }
+
+            .upload-body {
+                margin: auto 0;
+                padding: 0.5rem;
+            }
+
+            .box-file {
+                border: 1px solid #e4eaec;
+                width: 100%;
+                height: auto;
+            }
+
+            .box-item {
+                padding: 0.5rem;
+            }
+
+            .box-item-footer {
+                background-color: #e4eaec;
+            }
+
+            .sizing-contain {
+                /* width: 100%;
+                height: auto; */
+                width: 100%;
+                height: auto;
+                max-width: 200px;
+                max-height: 200px;
+            }
+
+            .img-hover:hover {
+                cursor: pointer;
+                background-color: #e4eaec;
+                opacity: 0.5;
+            }
+        </style>
+        <div class="page-container">
+            <aqa-title-name></aqa-title-name>
+            <aqa-panel id="basic">
+                <app-toolbar slot="header">
+                    <div main-title>บัญชีธนาคาร</div>
+                </app-toolbar>
+                <div slot="content">
+                    <div class="row">
+                        <div class="col-xs-12 col-md-8">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-12">
+                                    <aqa-combo-box required label="ธนาคาร" items="[[bankList]]" item-label-path="label" item-value-path="value"></aqa-combo-box>
+                                </div>
+                                <div class="col-xs-12 col-md-6">
+                                    <aqa-input required label="ประเภทบัญชี" value=""></aqa-input>
+                                    <!-- <aqa-combo-box label="ประเภทบัญชี" items="[[typeAccount]]" item-label-path="label" item-value-path="value"></aqa-combo-box> -->
+                                </div>
+                                <div class="col-xs-12 col-md-6">
+                                    <aqa-input label="สาขา" value="" required></aqa-input>
+                                </div>
+                                <div class="col-xs-12 col-md-6">
+                                    <aqa-input required label="เลขที่บัญชี" allowed-pattern="[0-9]" error-message="ตัวเลขเท่านั้น" value=""></aqa-input>
+                                </div>
+                                <div class="col-xs-12 col-md-6">
+                                    <aqa-input required label="ชื่อบัญชี" value=""></aqa-input>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-xs-12 col-md-4">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <b>แนบไฟล์ : ภาพถ่ายสมุดบัญชีธนาคาร <span style="color:red">*</span></b>
+                                </div>
+                                <div class="col-xs-12">
+                                    <div class="box-file">
+                                        <div class="box-item img-hover">
+                                            <div class="row center-xs">
+                                                <div class="col-xs-12">
+                                                    <aqa-lightbox>
+                                                        <img id="img" class="sizing-contain" src="../../../images/icon-img.png" alt="">
+                                                        <!-- <iron-image sizing="contain" id="img" src="http://i0.kym-cdn.com/entries/icons/mobile/000/005/608/nyan-cat-01-625x450.jpg"
+                                                                class="sizing-contain"></iron-image> -->
+                                                    </aqa-lightbox>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="box-item box-item-footer">
+                                            <div>
+                                                <input type="file" id="upFile" on-change="fileChange" hidden>
+                                                <aqa-button type="primary" on-tap="upLoadFile" icon="icons:file-upload">อัพโหลด</aqa-button>
+                                                <span id="imgname"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <div class="row center-xs">
+                                <div class="col-xs-12 upload-area">
+                                    <div class="upload-body">
+                                       
+                                    </div>
+                                </div>
+                            </div> -->
+                        </div>
+                    </div>
+
+
+                </div>
+            </aqa-panel>
+            <div style="margin:1rem"></div>
+            <div class="row center-xs">
+                <div class="col-lg-2">
+                    <div style="padding:0rem 2rem;">
+                        <aqa-button type="success btn-full-width">บันทึก</aqa-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+    <script>
+        class PageBank extends Polymer.Element {
+            static get is() { return 'page-bank'; }
+            static get properties() {
+                return {
+                    bankList: {
+                        type: Array,
+                        value: [
+                            {
+                                label: 'ธนาคารกรุงเทพ',
+                                value: '01'
+                            },
+                            {
+                                label: 'ธนาคารกรุงศรีอยุธยา',
+                                value: '02'
+                            },
+                            {
+                                label: 'ธนาคารกสิกรไทย',
+                                value: '03'
+                            },
+                            {
+                                label: 'ธนาคารเกียรตินาคิน',
+                                value: '04'
+                            },
+                            {
+                                label: 'ธนาคารซิติแบงก์',
+                                value: '05'
+                            },
+                            {
+                                label: 'ธนาคารทหารไทย',
+                                value: '06'
+                            },
+                            {
+                                label: 'ธนาคารทิสโก้',
+                                value: '07'
+                            },
+                            {
+                                label: 'ธนาคารซีไอเอ็มบี ไทย ',
+                                value: '08'
+                            },
+                            {
+                                label: 'ธนาคารไทยพาณิชย์',
+                                value: '09'
+                            },
+                            {
+                                label: 'ธนาคารธนชาต',
+                                value: '10'
+                            },
+                            {
+                                label: 'ธนาคารนครหลวงไทย',
+                                value: '11'
+                            },
+                            {
+                                label: 'ธนาคารยูโอบี',
+                                value: '12'
+                            },
+                            {
+                                label: 'ธนาคารสแตนดาร์ดชาร์เตอร์ดไทย',
+                                value: '13'
+                            },
+                            {
+                                label: 'ธนาคารเมกะสากลพาณิชย์',
+                                value: '14'
+                            },
+                            {
+                                label: 'ธนาคารไอซีบีซี',
+                                value: '15'
+                            },
+                            {
+                                label: 'ธนาคารพัฒนาวิสาหกิจขนาดกลางและขนาดย่อมแห่งประเทศไทย',
+                                value: '16'
+                            },
+                            {
+                                label: 'ธนาคารเพื่อการเกษตรและสหกรณ์การเกษตร',
+                                value: '17'
+                            },
+                            {
+                                label: 'ธนาคารเพื่อการส่งออกและนำเข้าแห่งประเทศไทย',
+                                value: '18'
+                            },
+                            {
+                                label: 'ธนาคารออมสิน',
+                                value: '19'
+                            },
+                            {
+                                label: 'ธนาคารอาคารสงเคราะห์',
+                                value: '20'
+                            },
+                            {
+                                label: 'ธนาคารอิสลามแห่งประเทศไทย',
+                                value: '21'
+                            },
+                        ]
+                    },
+                    typeAccount: {
+                        type: Array,
+                        value: [
+                            {
+                                label: 'บัญชีเงินฝากออมทรัพย์',
+                                value: '01'
+                            },
+                            {
+                                label: 'บัญชีเงินฝากประจำ',
+                                value: '02'
+                            },
+                            {
+                                label: 'บัญชีเงินฝากกระแสรายวัน',
+                                value: '03'
+                            }
+                        ]
+                    },
+                    hasFile: {
+                        type: Boolean,
+                        value: false
+                    }
+                }
+            }
+            upLoadFile() {
+                this.$.upFile.click()
+            }
+            showImage(e) {
+                var url = e.target.getAttribute('src');
+                // this.$.dialog.open()
+                window.open(url)
+                // console.log(this.$.myModal.style.display = "block")
+            }
+            fileChange(e) {
+                console.log(e.currentTarget.files)
+                if (e.currentTarget.files.length == 0) return;
+                this.hasFile = true;
+                var reader = new FileReader();
+                this.$.imgname.textContent = e.currentTarget.files[0].name;
+                reader.onload = function (e) {
+                    // get loaded data and render thumbnail.
+                    this.$.img.src = e.target.result;
+                }.bind(this);
+                // read the image file as a data URL.
+
+                reader.readAsDataURL(e.currentTarget.files[0]);
+            }
+        }
+        window.customElements.define(PageBank.is, PageBank);
+    </script>
+</dom-module>

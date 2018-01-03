@@ -1,0 +1,138 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/nylon-pages/nylon-pages.html">
+<link rel="import" href="./components/nylon-dialog/nylon-dialog.html">
+<link rel="import" href="./layout/layout-main.html">
+
+<!-- <link rel="lazy-import" href="pages/page-view/page-view.html">
+<link rel="lazy-import" href="pages/page-view2/page-view2.html"> -->
+<link rel="lazy-import" href="./pages/page-register/page-register.html">
+<link rel="lazy-import" href="./pages/page-profile/page-profile.html">
+<link rel="lazy-import" href="pages/page-dashboard/page-dashboard.html">
+<link rel="lazy-import" href="./pages/page-approve/page-approve.html">
+<link rel="lazy-import" href="./pages/page-tests/page-tests.html">
+<link rel="lazy-import" href="./pages/page-basic/page-basic.html">
+<link rel="lazy-import" href="./pages/page-address/page-address.html">
+<link rel="lazy-import" href="./pages/page-bank/page-bank.html">
+<link rel="lazy-import" href="./pages/page-skill/page-skill.html">
+<link rel="lazy-import" href="./pages/page-education/page-education.html">
+<link rel="lazy-import" href="pages/page-401/page-401.html">
+<link rel="lazy-import" href="pages/page-404/page-404.html">
+<!-- เรียกล็อกอิน -->
+
+<link rel="import" href="./redux-mixin.html">
+
+<link rel="import" href="./redux/register/register-redux.html">
+
+<dom-module id="nylon-init">
+  <template>
+    <style>
+       :host {
+        display: block;
+      }
+
+      [hidden] {
+        display: none;
+      }
+    </style>
+
+    <nylon-dialog></nylon-dialog>
+    <layout-main id="layoutMain" path-name="[[pathName]]">
+      <nylon-pages id="nylonPage">
+        <!-- <page-register path="/"></page-register> -->
+        <page-profile path="/profile/:name"></page-profile> 
+        <page-approve path="/approve"></page-approve>
+        <page-basic path="basic"></page-basic>
+        <page-address path="address"></page-address>
+        <page-bank path="bank"></page-bank>
+        <page-skill path="skill"></page-skill>
+        <page-education path="education"></page-education>
+        <!-- <page-dashboard path="/dashboard" rule></page-dashboard> -->
+        <page-tests path="/tests"></page-tests>
+        <!-- <page-401 path="*"></page-401> -->
+        <page-404 path="*"></page-404>
+      </nylon-pages>
+    </layout-main>
+   
+
+
+  </template>
+
+  <script>
+    class NylonInit extends ReduxMixin(Polymer.Element) {
+
+      static get is() { return 'nylon-init' }
+
+      static get properties() {
+        return {
+          pathName: {
+            type: String,
+            observer: '_pathNameChange'
+          },
+          login: {
+            type: Boolean,
+            value: true
+          },
+          dashboard: {
+            type: Boolean,
+            value: false
+          }
+        }
+      }
+      ready() {
+        super.ready()
+        this._debouncer = Polymer.Debouncer.debounce(
+          this._debouncer, // initially undefined
+          Polymer.Async.timeOut.after(700),
+          () => {
+            // console.log(localStorage.getItem('taxno'));
+            let texno = localStorage.getItem('taxno')
+            // console.log(texno);
+            if (texno !== null && texno !== undefined && texno !== '') {
+              Nylon.dispatch('REGISTER_CHECK_TAXNO', texno, (data) => {
+
+                let pathUrl = this.pathName
+                Nylon.dispatch('REGISTER_POST', data[0], pathUrl)
+              })
+            } else {
+              // Nylon.redirect('/')
+            }
+
+          });
+
+        // console.log(localStorage.getItem('taxno'));
+        // console.log(11);
+      }
+
+      _pathNameChange(val) {
+        if (val == "/") {
+          this.login = true;
+        } else {
+          this.login = false;
+        }
+        if (val == "/dashboard") {
+          this.dashboard = true;
+        } else {
+          this.dashboard = false;
+        }
+      }
+
+      checkLoginPage(login, dashboard) {
+        if (login === true && dashboard === false)
+          return false
+        return true
+      }
+      checkNomal(login, dashboard) {
+        if (login === false && dashboard === false)
+          return false
+        return true
+      }
+      checkDashboard(login, dashboard) {
+        if (login === false && dashboard === true)
+          return false
+        return true
+      }
+    }
+
+    window.customElements.define(NylonInit.is, NylonInit);
+  </script>
+</dom-module>

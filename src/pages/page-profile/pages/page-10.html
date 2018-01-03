@@ -1,0 +1,210 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer-element.html">
+<!-- <link rel="import" href="../../../../bower_components/paper-input/paper-input.html"> -->
+
+<link rel="import" href="../../../components/nylon-input/nylon-input.html">
+
+<!-- <link rel="import" href="../../../../bower_components/vaadin-combo-box/vaadin-combo-box.html"> -->
+
+<link rel="import" href="../../../my-icons.html">
+
+<link rel="import" href="../../../components/nylon-input/nylon-combo-box.html">
+<link rel="import" href="../../../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../../components/nylon-panel-card/nylon-panel-card.html">
+<link rel="import" href="../../../layout/flexbox-grid.html">
+<link rel="import" href="../../../layout/shared-styles.html">
+<link rel="import" href="../../../nylon-i18n.html">
+<link rel="import" href="../../../i18n/profile/page-10-i18n.html">
+<link rel="import" href="../../../redux/profile/page-10-redux.html">
+<link rel="import" href="../../../redux-mixin.html">
+<link rel="import" href="../../../mixins/animate-mixin.html">
+<link rel="import" href="../../../mixins/common-mixin.html">
+
+<dom-module id="page-10">
+    <template>
+        <style include="flexbox-grid shared-styles">
+             :host {
+                display: block
+            }
+
+            #wrapper {
+                text-align: center;
+                margin: 0 auto;
+                padding: 0px;
+                width: 995px;
+            }
+
+            #output_image {
+                border: 1px solid black;
+                width: 10em;
+                height: 10em;
+            }
+
+            #ifile {
+                width: 0.1px;
+                height: 0.1px;
+                opacity: 0;
+                overflow: hidden;
+                position: absolute;
+                z-index: -1;
+            }
+
+            .upload_image {
+                margin-top: 5px;
+            }
+        </style>
+        <!-- page-10 -->
+        <div id="bank">
+            <nylon-panel-card>
+                <div slot="content">
+                    <div class="header-title">
+                        [[i18n.page10.bank_account]]
+                    </div>
+                    <div class="row middle-md">
+                        <div class="col-md-3 col-md-offset-1">
+                            <nylon-combo-box class="required" required always-float-label label="[[i18n.page10.bank]]" items='{{bankList}}' value="{{bank.bank_id}}"
+                                item-label-path="bank_name_th" item-value-path="id" on-selected-item-changed="getObject" object-name="bank.bank">
+                                <template>
+                                    [[item.bank_name_th]]
+                                </template>
+                            </nylon-combo-box>
+                        </div>
+                        <div class="col-md-3 col-md-offset-1">
+                            <nylon-combo-box class="required" required always-float-label label="[[i18n.page10.account_Types]]" items='{{typeList}}'
+                                value="{{bank.type_account_id}}" item-label-path="type_account_name_th" item-value-path="id"
+                                on-selected-item-changed="getObject" object-name="bank.type_account">
+                                <template>
+                                    [[item.type_account_name_th]]
+                                </template>
+                            </nylon-combo-box>
+                        </div>
+                        <div class="col-md-3 col-md-offset-1">
+                            <nylon-input class="required" required always-float-label label="[[i18n.page10.branch]]" value="{{bank.branch}}"></nylon-input>
+                        </div>
+                    </div>
+                    <div class="row middle-md">
+                        <div class="col-md-4 col-md-offset-1">
+                            <nylon-input class="required" required always-float-label allowed-pattern="[0-9]" label="[[i18n.page10.account_number]]"
+                                value="{{bank.account_number}}"></nylon-input>
+                        </div>
+                        <div class="input col-md-3">
+                            [[i18n.page10.warning]]
+                        </div>
+                    </div>
+                    <div class="row middle-md">
+                        <div class="col-md-7 col-md-offset-1">
+                            <nylon-input class="required" required always-float-label label="[[i18n.page10.account_name]]" value="{{bank.account_name}}"></nylon-input>
+                        </div>
+                    </div>
+                    <div class="row center-md button-buttom">
+                        <div class="button-action-bottom">
+                            <div class="button-action-bottom">
+                                <paper-button raised class="btn-success" on-click="_save">
+                                    <iron-icon icon="[[i18n.button.save.icon]]"></iron-icon>&nbsp;&nbsp;[[i18n.button.save.label]]
+                                </paper-button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nylon-panel-card>
+
+            <div style="margin-top:5%;"></div>
+            <nylon-panel-card>
+                <div slot="content">
+                    <div class="header-title">
+                        [[i18n.page10.photo_account]]
+                    </div>
+                    <div class="row middle-md center-md">
+                        <div class=" col-md-12">
+                            <img id="output_image" src$="[[rootPath]]images/I20170901111610.jpg" />
+                        </div>
+                        <div class=" col-md-3">
+                            <input id="ifile" type=file accept="image/" on-change="preview_image">
+                            <paper-button raised on-tap="upload_img" class="upload_image btn-upload">
+                                <iron-icon icon="[[i18n.button.upload.icon]]"></iron-icon>&nbsp;&nbsp; [[i18n.button.upload.label]]</paper-button>
+                        </div>
+                    </div>
+                    <div class="row center-md button-buttom">
+                        <div class="button-action-bottom">
+                            <div class="button-action-bottom">
+                                <paper-button raised class="btn-success" on-click="_save">
+                                    <iron-icon icon="[[i18n.button.save.icon]]"></iron-icon>&nbsp;&nbsp;[[i18n.button.save.label]]
+                                </paper-button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nylon-panel-card>
+        </div>
+    </template>
+
+    <script>
+        class Page10 extends AnimateMixin(CommonMixin(ReduxMixin(Polymer.Element))) {
+
+            static get is() {
+                return 'page-10';
+            }
+
+            static get properties() {
+                return {
+                    i18n: {
+                        type: Object,
+                        statePath: 'i18n',
+                    },
+                    rootPath: {
+                        type: String,
+                    },
+                    bankList: {
+                        statePath: 'profile_page10.bank'
+                    },
+                    typeList: {
+                        statePath: 'profile_page10.account_Types'
+                    },
+                    info: {
+                        type: Object,
+                        statePath: 'profile.info'
+                    },
+                    bank: {
+                        type: Object,
+                        statePath: 'profile.info.bank',
+                        // value: {}
+                    },
+                };
+            }
+
+
+            ready() {
+                super.ready();
+                var elem = this.$.bank
+                //this.fadeInDown(elem, 1, 300)
+                Nylon.dispatch('PROFILE_10_GET_LIST_BANK')
+                Nylon.dispatch('PROFILE_10_GET_LIST_ACCOUNT_TYPE')
+            }
+            upload_img() {
+                this.$.ifile.click()
+            }
+            preview_image(e) {
+                var reader = new FileReader()
+                reader.onload = () => {
+                    var output = this.$.output_image
+                    output.src = reader.result
+                }
+                reader.readAsDataURL(event.target.files[0])
+            }
+            _save() {
+                // console.log(this.bank);
+                if (this.validateForm('.required')) {
+                    Nylon.dispatch('PROFILE_UPDATE', this.info.id, 'bank', this.bank,
+                        () => {
+                            Nylon.toast('update')
+                        }
+                    )
+                } else {
+                    Nylon.toast('required')
+                }
+            }
+        }
+
+        window.customElements.define(Page10.is, Page10);
+    </script>
+</dom-module>

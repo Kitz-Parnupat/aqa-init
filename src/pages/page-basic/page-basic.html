@@ -1,0 +1,551 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+
+<link rel="import" href="../../../bower_components/iron-image/iron-image.html">
+<link rel="import" href="../../mixins/common-mixin.html">
+<link rel="import" href="../../redux-mixin.html">
+<link rel="import" href="../../redux/profile/page-01-redux.html">
+<link rel="import" href="../../components/aqa-form/aqa-combo-box.html">
+<link rel="import" href="../../layout/flexbox-grid.html">
+<link rel="import" href="../../layout/shared-styles.html">
+<link rel="import" href="../../components/aqa-panel/aqa-panel.html">
+<link rel="import" href="../../components/aqa-button/aqa-button.html">
+<link rel="import" href="../../components/aqa-form/aqa-input.html">
+
+<link rel="import" href="../../components/aqa-title/aqa-title-name.html">
+
+<link rel="import" href="../../components/aqa-form/aqa-date-picker.html">
+
+<link rel="import" href="../../../bower_components/paper-toast/paper-toast.html">
+
+
+<dom-module id="page-basic">
+    <template>
+        <style include="flexbox-grid shared-styles">
+            /* #example-sizing-contain {
+                width: 100%;
+                height: auto;
+            } */
+            #output_image {
+                width: 100%;
+                height: auto;
+                min-width: 96px;
+                min-height: auto;
+                margin: 0 auto;
+            }
+
+            .img-circle {
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+            }
+
+            .flex-container {
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .header-content>b {
+                font-family: MitrLight;
+            }
+
+            .flex {
+                display: flex;
+            }
+
+            .flex-item {
+                margin: 0 auto;
+            }
+        </style>
+        <div class="page-container">
+
+            <aqa-title-name></aqa-title-name>
+            <aqa-panel id="basic">
+                <app-toolbar slot="header">
+                    <div main-title>ข้อมูลพื้นฐาน</div>
+                </app-toolbar>
+                <div slot="content">
+                    <div class="row center-sm" style="text-align:left">
+                        <div class="col-xs-12 col-lg-10">
+                            <div class="row">
+                                <!-- <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+                                    <aqa-input class="form" label="เลขประจำตัวประชาชน" type="pid" required></aqa-input>
+                                </div> -->
+                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                                    <aqa-input class="form" label="รหัสผู้ประเมิน" ></aqa-input>
+                                </div>
+                                <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                                    <aqa-input label="สถานะ" value=""></aqa-input>
+                                    <!-- <aqa-input label="วันที่ออกบัตร" value=""></aqa-input> -->
+                                    <!-- <aqa-date-picker id="date" label="วันที่ออกบัตร" selected="" show-bc></aqa-date-picker> -->
+                                </div>
+                                <div class="col-xs-12 col-sm-6 col-md-12 col-lg-4">
+                                    <aqa-combo-box label="ตำแหน่งทางวิชาการ" items="[[academicList]]" item-label-path="label" item-value-path="value" auto-validate
+                                        required disabled></aqa-combo-box>
+                                    <!-- <aqa-combo-box label="สถานะการทำงาน" items="[[statusList]]" item-label-path="label" item-value-path="value"></aqa-combo-box>  -->
+                                    <!-- <aqa-date-picker id="date" label="วันที่บัตรหมดอายุ" selected="" show-bc></aqa-date-picker> -->
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                    <!-- <aqa-input class="form" label="คำนำหน้า (ไทย)" value="" required></aqa-input>  -->
+                                    <aqa-combo-box class="form" label="คำนำหน้า (ไทย)" items="[[prefix]]" item-label-path="label_th" item-value-path="value"></aqa-combo-box>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+                                    <aqa-input class="form" label="ชื่อ (ไทย)" auto-validate pattern="[a-zA-Zก-์. ]*" error-message="ตัวอักษรเท่านั้น" required></aqa-input>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-5">
+                                    <aqa-input class="form" label="นามสกุล (ไทย)" auto-validate pattern="[a-zA-Zก-์. ]*" error-message="ตัวอักษรเท่านั้น" required></aqa-input>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3">
+                                    <!-- <aqa-input label="คำนำหน้า (อังกฤษ)" value=""></aqa-input>  -->
+                                    <aqa-combo-box class="form" label="คำนำหน้า (อังกฤษ)" items="[[prefix]]" item-label-path="label_eng" item-value-path="value"></aqa-combo-box>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+                                    <aqa-input label="ชื่อ (อังกฤษ)"></aqa-input>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-5">
+                                    <aqa-input label="นามสกุล (อังกฤษ)" value=""></aqa-input>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="first-xs last-lg col-xs-12 col-sm-4 col-lg-2">
+                            <div>
+                                <!-- <div class="flex-item"> -->
+                                <img id="output_image" src$="[[rootPath]]../../../images/user upload.png" />
+                                <aqa-button type="primary btn-full-width" icon="icons:file-upload" style="max-width:96px">อัพโหลด</aqa-button>
+                                <!-- </div> -->
+                            </div>
+                            <div style="margin:1rem"></div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-2">
+                            <aqa-combo-box label="เพศ" items="[[genderList]]" item-label-path="label" item-value-path="value"></aqa-combo-box>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+                            <aqa-combo-box label="ศาสนา" items="[[religionList]]" item-label-path="label" item-value-path="value"></aqa-combo-box>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                            <aqa-combo-box label="เชื้อชาติ" items="[[nationalityList]]" item-label-path="label" item-value-path="value"></aqa-combo-box>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+                            <aqa-combo-box label="สัญชาติ" items="[[nationalityList]]" item-label-path="label" item-value-path="value"></aqa-combo-box>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3">
+                            <aqa-date-picker class="form" value="{{birthDay}}" required disabled>
+                                <aqa-input label="วัน/เดือน/ปี เกิด (พ.ศ.)"></aqa-input>
+                            </aqa-date-picker>
+                            <!-- <aqa-date-picker id="date" label="วัน/เดือน/ปี เกิด" selected="{{birthDay}}" show-bc></aqa-date-picker> -->
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-2">
+                            <aqa-input label="อายุ (ปี)" value="{{mathAge(birthDay)}}" disabled></aqa-input>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+                            <aqa-input class="form" label="เบอร์มือถือ" type="phone" required></aqa-input>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                            <aqa-input class="form" label="เลขประจำตัวประชาชน" type="pid" required></aqa-input>
+                        </div>
+                        <div class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
+                            <aqa-date-picker >
+                                <aqa-input label="วันที่ออกบัตร (พ.ศ.)"></aqa-input>
+                            </aqa-date-picker>
+                            <!-- <aqa-date-picker id="date" label="วันที่ออกบัตร" selected="" show-bc></aqa-date-picker> -->
+                        </div>
+
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3">
+                            <aqa-date-picker>
+                                <aqa-input label="วันที่บัตรหมดอายุ (พ.ศ.)"></aqa-input>
+                            </aqa-date-picker>
+                            <!-- <aqa-date-picker id="date" label="วันที่บัตรหมดอายุ" selected="" show-bc></aqa-date-picker> -->
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4">
+                            <aqa-combo-box label="สถานะการทำงาน" items="[[statusList]]" item-label-path="label" item-value-path="value"></aqa-combo-box>
+                        </div>
+                    </div>
+
+                </div>
+
+        </div>
+
+
+
+        <div class="row center-xs">
+            <div class="col-lg-2">
+                <div style="padding:0rem 2rem;">
+                    <aqa-button type="success btn-full-width" on-tap="getForm">บันทึก</aqa-button>
+                </div>
+            </div>
+        </div>
+        
+        
+        <paper-toast id="toast" horizontal-align="right" vertical-align="bottom" text="บันทึกสำเร็จ"></paper-toast>
+        
+    </template>
+    <script>
+        class PageBasic extends CommonMixin(ReduxMixin(Polymer.Element)) {
+            static get is() { return 'page-basic'; }
+            // static get observers() { 
+            //     return ['mathAge(birthDay)']
+            // }
+            static get properties() {
+                return {
+                    academicList: {
+                        type: Array,
+                        value: [
+                            {
+                                label: 'ศาสตราจารย์กิตติคุณ',
+                                value: '01'
+                            },
+                            {
+                                label: 'ศาสตราจารย์เกียรติคุณ',
+                                value: '02'
+                            },
+                            {
+                                label: 'ศาสตราจารย์พิเศษ',
+                                value: '03'
+                            },
+                            {
+                                label: 'ศาสตราจารย์',
+                                value: '04'
+                            },
+                            {
+                                label: 'รองศาสตราจารย์',
+                                value: '05'
+                            },
+                            {
+                                label: 'ผู้ช่วยศาสตราจารย์',
+                                value: '06'
+                            }
+                        ]
+                    },
+                    genderList: {
+                        type: Array,
+                        value: [
+                            {
+                                label: 'ชาย',
+                                value: 'male'
+                            },
+                            {
+                                label: 'หญิง',
+                                value: 'female'
+                            }
+                        ]
+                    },
+                    nationalityList: {
+                        type: Array,
+                        value: [
+                            {
+                                label: 'ไทย',
+                                value: '01'
+                            },
+                            {
+                                label: 'กัมพูชา',
+                                value: '02'
+                            },
+                            {
+                                label: 'เกาหลีใต้',
+                                value: '03'
+                            },
+                            {
+                                label: 'จีน',
+                                value: '04'
+                            },
+                            {
+                                label: 'ญี่ปุ่น',
+                                value: '05'
+                            },
+                            {
+                                label: 'นิวซีแลนด์',
+                                value: '06'
+                            },
+                            {
+                                label: 'บรูไนดารุสซาลาม',
+                                value: '07'
+                            },
+                            {
+                                label: 'พม่า',
+                                value: '08'
+                            },
+                            {
+                                label: 'ฟิลิปปินส์',
+                                value: '09'
+                            },
+                            {
+                                label: 'มาเลเซีย',
+                                value: '10'
+                            },
+                            {
+                                label: 'เยอรมนี',
+                                value: '11'
+                            },
+                            {
+                                label: 'รัสเซีย',
+                                value: '12'
+                            },
+                            {
+                                label: 'ลาว',
+                                value: '13'
+                            },
+                            {
+                                label: 'เวียดนาม',
+                                value: '14'
+                            },
+                            {
+                                label: 'สหรัฐอเมริกา',
+                                value: '15'
+                            },
+                            {
+                                label: 'สิงคโปร์',
+                                value: '16'
+                            },
+                            {
+                                label: 'ออสเตรเลีย',
+                                value: '17'
+                            },
+                            {
+                                label: 'อังกฤษ',
+                                value: '18'
+                            },
+                            {
+                                label: 'อินโดนีเซีย',
+                                value: '19'
+                            }
+
+                        ]
+                    },
+                    religionList: {
+                        type: Array,
+                        value: [
+                            {
+                                label: 'พุทธ',
+                                value: '01'
+                            },
+                            {
+                                label: 'คริสต์',
+                                value: '02'
+                            },
+                            {
+                                label: 'อิสลาม',
+                                value: '03'
+                            },
+                            {
+                                label: 'พราหมณ์',
+                                value: '04'
+                            },
+                            {
+                                label: 'ฮินดู',
+                                value: '05'
+                            },
+                            {
+                                label: 'ซิกข์',
+                                value: '06'
+                            }
+                        ]
+                    },
+                    statusList: {
+                        type: Array,
+                        value: [
+                            {
+                                label: 'ประกอบธุรกิจส่วนตัว',
+                                value: '01'
+                            },
+                            {
+                                label: 'พนักงานของรัฐ',
+                                value: '02'
+                            },
+                            {
+                                label: 'พนักงานของเอกชน',
+                                value: '03'
+                            },
+                            {
+                                label: 'เกษียณราชการ',
+                                value: '04'
+                            }
+                        ]
+                    },
+                    prefix: {
+                        type: Array,
+                        value: [
+                            {
+                                label_th: 'นาย',
+                                label_eng: 'Mr.',
+                                value: '01'
+                            },
+                            {
+                                label_th: 'นาง',
+                                label_eng: 'Mrs.',
+                                value: '02'
+                            },
+                            {
+                                label_th: 'นางสาว',
+                                label_eng: 'Miss',
+                                value: '03'
+                            }
+                        ]
+                    },
+                    info: {
+                        type: Object,
+                        statePath: 'profile.info'
+                    },
+                    birthDay: {
+                        type: String,
+                        value: ''
+                    }
+                }
+            }
+            ready() {
+                super.ready();
+                var elem = this.$.basic
+                //this.fadeInDown(elem, 1, 500)
+                Polymer.RenderStatus.afterNextRender(this, function () {
+                    Nylon.dispatch('PROFILE_01_GET_LIST_ACADAMIC_POSITION')
+                    Nylon.dispatch('PROFILE_01_GET_LIST_GENDER')
+                    Nylon.dispatch('PROFILE_01_GET_LIST_NATIONALITY')
+                    Nylon.dispatch('PROFILE_01_GET_LIST_RELIGION')
+                    Nylon.dispatch('PROFILE_01_GET_LIST_WORK_STATUS')
+                    Nylon.dispatch('REGISTER_CHECK_PERSON', localStorage.getItem('taxno'))
+                });
+            }
+            getForm() {
+                // this.$.testdate.errorMassage = "กรุณากรอกข้อมูล"
+                // console.log(this.$.testdate.getAttribute('error-massage'));
+                // this.$.testdate.validate()
+                for (var index = 0; index < this.queryFrom('.form').length; index++) {
+                    if (this.queryFrom('.form')[index].validate() == true) {
+                        this.queryFrom('.form')[index].errorMassage = "กรุณากรอกข้อมูล"
+                    }
+                }
+                this.$.toast.open()
+            }
+            calAge(dateString) {
+                if (dateString === undefined || dateString === '')
+                    return ''
+                var now = new Date();
+                var today = new Date(now.getYear(), now.getMonth(), now.getDate());
+
+                var yearNow = now.getYear();
+                var monthNow = now.getMonth();
+                var dateNow = now.getDate();
+
+                var dob = new Date(dateString);
+
+                var yearDob = dob.getYear();
+                var monthDob = dob.getMonth();
+                var dateDob = dob.getDate();
+                var age = {};
+                var ageString = "";
+                var yearString = "";
+                var monthString = "";
+                var dayString = "";
+
+
+                let yearAge = yearNow - yearDob;
+
+                if (monthNow >= monthDob)
+                    var monthAge = monthNow - monthDob;
+                else {
+                    yearAge--;
+                    var monthAge = 12 + monthNow - monthDob;
+                }
+
+                if (dateNow >= dateDob)
+                    var dateAge = dateNow - dateDob;
+                else {
+                    monthAge--;
+                    var dateAge = 31 + dateNow - dateDob;
+
+                    if (monthAge < 0) {
+                        monthAge = 11;
+                        yearAge--;
+                    }
+                }
+
+                age = {
+                    years: yearAge,
+                    months: monthAge,
+                    days: dateAge
+                };
+
+                if (age.years > 1) yearString = " ปี";
+                else yearString = " ปี";
+                if (age.months > 1) monthString = " เดือน";
+                else monthString = " เดือน";
+                if (age.days > 1) dayString = " วัน";
+                else dayString = " วัน";
+
+
+                // if ((age.years > 0) && (age.months > 0) && (age.days > 0))
+                //     ageString = age.years + yearString + " " + age.months + monthString + " " + age.days + dayString
+                // else if ((age.years == 0) && (age.months == 0) && (age.days > 0))
+                //     ageString = age.days + dayString
+                // else if ((age.years > 0) && (age.months == 0) && (age.days == 0))
+                //     ageString = age.years + yearString + " old. Happy Birthday!!";
+                // else if ((age.years > 0) && (age.months > 0) && (age.days == 0))
+                //     ageString = age.years + yearString + " " + age.months + monthString
+                // else if ((age.years == 0) && (age.months > 0) && (age.days > 0))
+                //     ageString = age.months + monthString + " " + age.days + dayString
+                // else if ((age.years > 0) && (age.months == 0) && (age.days > 0))
+                //     ageString = age.years + yearString + " " + age.days + dayString
+                // else if ((age.years == 0) && (age.months > 0) && (age.days == 0))
+                //     ageString = age.months + monthString
+                // else ageString = "ไม่สามารถคำนวนอายุได้!";
+
+                if ((age.years > 0) && (age.months > 0) && (age.days > 0))
+                    ageString = age.years + yearString + " " + age.months + monthString + " " 
+                else if ((age.years == 0) && (age.months == 0) && (age.days > 0))
+                    ageString = age.days + dayString
+                else if ((age.years > 0) && (age.months == 0) && (age.days == 0))
+                    ageString = age.years + yearString + " สุขสันต์วันเกิด!!";
+                else if ((age.years > 0) && (age.months > 0) && (age.days == 0))
+                    ageString = age.years + yearString + " " + age.months + monthString
+                else if ((age.years == 0) && (age.months > 0) && (age.days > 0))
+                    ageString = age.months + monthString 
+                else if ((age.years > 0) && (age.months == 0) && (age.days > 0))
+                    ageString = age.years + yearString
+                else if ((age.years == 0) && (age.months > 0) && (age.days == 0))
+                    ageString = age.months + monthString
+                else ageString = "ไม่สามารถคำนวนอายุได้!";
+
+                return ageString;
+
+            }
+            mathAge(date) {
+                // console.log('ss', date)
+                return this.calAge(date)
+                // if (!date) return
+                // var nowDate = new Date().toISOString();
+                // var birthDay = date
+                // const _today = {
+                //     year: parseInt(nowDate.split('-')[0]),
+                //     month: parseInt(nowDate.split('-')[1]),
+                //     day: parseInt(nowDate.split('-')[2].split('T')[0]),
+                // }
+                // const _birthDay = {
+                //     year: parseInt(birthDay.split('-')[0]),
+                //     month: parseInt(birthDay.split('-')[1]),
+                //     day: parseInt(birthDay.split('-')[2]),
+                // }
+                // // console.log(_birthDay.day)
+                // var resultMonth = ((_today.year * 12) + (_today.month + 1)) - ((_birthDay.year * 12) + (_birthDay.month + 1));
+                // if (0 > (_today.day - _birthDay.day)) {
+                //     var y = _today.year, m = _today.month;
+                //     m = (--m < 0) ? 11 : m;
+                //     _today.day +=
+                //         [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][m]
+                //         + (((1 == m) && ((y % 4) == 0) && (((y % 100) > 0) || ((y % 400) == 0)))
+                //             ? 1 : 0);
+                //     --resultMonth;
+                // }
+                // return (resultMonth - (resultMonth % 12)) / 12;
+            }
+        }
+        window.customElements.define(PageBasic.is, PageBasic);
+    </script>
+</dom-module>

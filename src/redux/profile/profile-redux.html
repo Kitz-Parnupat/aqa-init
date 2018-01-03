@@ -1,0 +1,109 @@
+<script>
+    Nylon.addReducer('profile', function (state, action) {
+        state = state || {
+            menu: [
+                { name: 'ข้อมูลพื้นฐาน', component: 'page-01', field: 'basic' },
+                { name: 'ที่อยู่ในการติดต่อ', component: 'page-02', field: 'contact' },
+                { name: 'วุฒิการศึกษา', component: 'page-03', field: 'education' },
+                { name: 'สาขาเชี่ยวชาญ', component: 'page-04', field: 'specialist' },
+                { name: 'ประวัติการทำงาน', component: 'page-05', field: 'working' },
+                { name: 'ความสามารถอื่นๆ', component: 'page-06', field: 'skills' },
+                { name: 'ประวัติการประเมิน', component: 'page-07', field: 'assessment' },
+                { name: 'ผลงานทางวิชาการ', component: 'page-08', field: 'research' },
+                { name: 'ประวัติการอบรมประกันคุณภาพภายใน', component: 'page-09', field: 'meeting' },
+                { name: 'บัญชีธนาคาร', component: 'page-10', field: 'bank' },
+                { name: 'ภาคที่สะดวกในการประเมิน', component: 'page-11', field: 'zone' },
+                { name: 'บุคคลอ้างอิง', component: 'page-12', field: 'references' },
+                { name: 'ไฟล์เอกสาร', component: 'page-13', field: 'documents' }
+            ],
+            info: {}
+        }
+
+        switch (action.type) {
+            case 'PROFILE_LOGIN':
+                state.info = action.data
+                return state
+            case 'PROFILE_UPDATE':
+                const fields = action.field.split('.');
+                if (fields.length > 1) {
+                    // delete state.info[fields[0]][fields[1]];
+                    state.info[fields[0]][fields[1]] = JSON.parse(JSON.stringify(action.data))
+                } else {
+                    state.info[fields[0]] = JSON.parse(JSON.stringify(action.data))
+                }
+                return state
+            case 'PROFILE_PUSH_ARRAY':
+                if (!state.info.hasOwnProperty(action.field))
+                    state.info[action.field] = [];
+                var list = state.info[action.field].slice(0);
+                list.push(action.data);
+                state.info[action.field] = list;
+                return state
+            case 'PROFILE_UPDATE_ARRAY':
+                var list = state.info[action.field].slice(0);
+                list[action.index] = action.data;
+                state.info[action.field] = list
+                return state
+            case 'PROFILE_SPLICE_ARRAY':
+                var list = state.info[action.field].slice(0);
+                list.splice(action.index, 1);
+                state.info[action.field] = list
+                return state
+            default:
+                return state
+        }
+
+    })
+
+
+    Nylon.addAction({
+        PROFILE_LOGIN: function (data) {
+            // console.log('eeeeeeee');
+            // '/profile/ข้อมูลพื้นฐาน'
+            // console.log(data.taxno);
+            localStorage.removeItem("taxno")
+            localStorage.setItem("taxno", data.taxno)
+            let path = data.pathUrl || '/profile/ข้อมูลพื้นฐาน'
+            return dispatch => {
+                dispatch({ type: 'PROFILE_LOGIN', data: data })
+                Nylon.redirect(path);
+            }
+        },
+        PROFILE_UPDATE: function (id, field, data, callback) {
+            return dispatch => {
+                axios.put('/profile', { id: id, field: field, data: data }).then(
+                    res => {
+                        dispatch({
+                            type: 'PROFILE_UPDATE',
+                            field: field,
+                            data: data
+                        })
+                        callback();
+                    }
+                )
+            }
+        },
+        PROFILE_PUSH_ARRAY: function (id, field, data, callback) {
+            // console.log(Nylon.store.getState().profile.info[field])
+            return dispatch => {
+                dispatch({ type: 'PROFILE_PUSH_ARRAY', field: field, data: data })
+                // console.log(Nylon.store.getState().profile.info[field])
+                Nylon.dispatch('PROFILE_UPDATE', id, field, Nylon.store.getState().profile.info[field], () => callback());
+            }
+        },
+        PROFILE_UPDATE_ARRAY: function (id, field, index, data, callback) {
+            // console.log(Nylon.store.getState().profile.info[field])
+            return dispatch => {
+                dispatch({ type: 'PROFILE_UPDATE_ARRAY', field: field, index: index, data: data })
+                Nylon.dispatch('PROFILE_UPDATE', id, field, Nylon.store.getState().profile.info[field], () => callback());
+            }
+        },
+        PROFILE_SPLICE_ARRAY: function (id, field, index, callback) {
+            return dispatch => {
+                dispatch({ type: 'PROFILE_SPLICE_ARRAY', field: field, index: index })
+                Nylon.dispatch('PROFILE_UPDATE', id, field, Nylon.store.getState().profile.info[field], () => callback());
+            }
+        }
+    })
+
+</script>

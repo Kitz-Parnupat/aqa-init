@@ -1,0 +1,235 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../../bower_components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../../../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../../../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../../../components/nylon-panel-card/nylon-panel-card.html">
+<link rel="import" href="../../../../bower_components/paper-styles/color.html">
+<link rel="import" href="../../../../bower_components/paper-icon-button/paper-icon-button.html">
+
+<link rel="import" href="../../../nylon-i18n.html">
+
+<link rel="import" href="../../../i18n/profile/page-00-i18n.html">
+
+<link rel="import" href="../../../my-icons.html">
+<link rel="import" href="../../../layout/flexbox-grid.html">
+<link rel="import" href="../../../redux-mixin.html">
+<link rel="import" href="../../../redux/profile/profile-redux.html">
+<dom-module id="page-00">
+    <template>
+        <style include="flexbox-grid flexbox-grid-remove-padding">
+            * {
+                font-size: 18px;
+            }
+
+            .title {
+                font-weight: bold;
+            }
+
+            iron-selector>* {
+                padding-left: 15px;
+                padding-top: 3px;
+                cursor: pointer;
+            }
+
+            .menu {
+                font-size: .8em;
+            }
+
+            .menu:hover {
+                background-color: var(--paper-indigo-500);
+                font-weight: bold;
+                color: #fff;
+            }
+
+            .iron-selected {
+                /* padding-left: 15px; */
+                background-color: var(--paper-blue-500);
+                font-weight: bold;
+                color: #fff;
+                /* border-left: 4px solid #dd4b39; */
+            }
+
+            .border {
+                border: 1px solid black;
+            }
+            .panel-form {
+                margin-right:2em;
+            }
+            .pointer {
+                cursor: pointer;
+                color: #4285f4;
+                font-size: 1em;
+            }
+
+            .pointer:hover {
+                font-weight: bold;
+                text-decoration: none;
+            }
+        </style>
+
+        <div class="row ">
+            <div class="col-md-offset-1 ">
+            </div>
+            <div class="col-md-3 panel-form">
+                <nylon-panel-card>
+                    <app-toolbar slot="header">
+                        <div main-title>
+                            <paper-icon-button src="[[rootPath]]images/persona_identity.svg"></paper-icon-button>
+                            [[i18n.page00.general_information]] & [[i18n.page00.other_information]] </div>
+                        <!-- <paper-icon-button icon="chevron-right"></paper-icon-button> -->
+                    </app-toolbar>
+                    <div slot="content">
+                        <div class="col-md-12 title">
+                            [[i18n.page00.general_information]]
+                        </div>
+                        <div class="col-md-offset-1 ">
+                            <div class="col-md-12 pointer" page='{{i18n.page00.basic}}' on-tap="openPage">
+                                [[i18n.page00.basic]]
+                            </div>
+                            <div class="col-md-12 pointer" page='[[i18n.page00.address]]' on-tap="openPage">
+                                [[i18n.page00.address]]
+                            </div>
+                            <div class="col-md-12 pointer" page='[[i18n.page00.bank]]' on-tap="openPage">
+                                [[i18n.page00.bank]]
+                            </div>
+                        </div>
+                        <div class="col-md-12 title">
+                            [[i18n.page00.other_information]]
+                        </div>
+                        <div class="col-md-offset-1 ">
+                            <div class="col-md-12 pointer" page='[[i18n.page00.skills]]' on-tap="openPage">
+                                [[i18n.page00.skills]]
+                            </div>
+                            <div class="col-md-12 pointer" page='[[i18n.page00.zone]]' on-tap="openPage">
+                                [[i18n.page00.zone]]
+                            </div>
+                            <div class="col-md-12 pointer" page='[[i18n.page00.references]]' on-tap="openPage">
+                                [[i18n.page00.references]]
+                            </div>
+                            <div class="col-md-12 pointer" page='[[i18n.page00.documents]]' on-tap="openPage">
+                                [[i18n.page00.documents]]
+                            </div>
+                        </div>
+                    </div>
+                </nylon-panel-card>
+            </div>
+            <div class="col-md-3 panel-form">
+                <nylon-panel-card>
+                    <app-toolbar slot="header">
+                        <div main-title>
+                            <paper-icon-button src="[[rootPath]]images/education.svg"></paper-icon-button>[[i18n.page00.education_topic]]</div>
+                        <!-- <paper-icon-button icon="chevron-right"></paper-icon-button> -->
+                    </app-toolbar>
+                    <div slot="content">
+                        <div class="col-md-12 title">
+                            [[i18n.page00.education_topic]]
+                        </div>
+                        <div class="col-md-offset-1 ">
+                            <div class="col-md-12 pointer" page='[[i18n.page00.education]]' on-tap="openPage">
+                                [[i18n.page00.education]]
+                            </div>
+                            <div class="col-md-12 pointer" page='[[i18n.page00.research]]' on-tap="openPage">
+                                [[i18n.page00.research]]
+                            </div>
+                            <div class="col-md-12 pointer" page='[[i18n.page00.specialist]]' on-tap="openPage">
+                                [[i18n.page00.specialist]]
+                            </div>
+                        </div>
+                    </div>
+                </nylon-panel-card>
+            </div>
+            <div class="col-md-3">
+                <nylon-panel-card>
+                    <app-toolbar slot="header">
+                        <div main-title>
+                            <paper-icon-button src="[[rootPath]]images/portfolio.svg"></paper-icon-button>[[i18n.page00.history]]</div>
+                        <!-- <paper-icon-button icon="chevron-right"></paper-icon-button> -->
+                    </app-toolbar>
+                    <div slot="content">
+                        <div class="col-md-12 title">
+                            [[i18n.page00.history]]
+                        </div>
+                        <div class="col-md-offset-1 ">
+                            <div class="col-md-12 pointer" page='[[i18n.page00.working]]' on-tap="openPage">
+                                [[i18n.page00.working]]
+                            </div>
+                            <div class="col-md-12 pointer" page='[[i18n.page00.assessment]]' on-tap="openPage">
+                                [[i18n.page00.assessment]]
+                            </div>
+                            <div class="col-md-12 pointer" page='[[i18n.page00.meeting]]' on-tap="openPage">
+                                [[i18n.page00.meeting]]
+                            </div>
+                        </div>
+                    </div>
+                </nylon-panel-card>
+            </div> 
+
+
+        </div>
+    </template>
+
+    <script>
+        class Page00 extends ReduxMixin(Polymer.Element) {
+            static get is() {
+                return 'page-00';
+            }
+            static get properties() {
+                return {
+                    i18n: {
+                        type: Object,
+                        statePath: 'i18n'
+                    },
+                    menu: {
+                        type: Object,
+                        statePath: 'profile.menu'
+                    },
+                    info: {
+                        type: Object,
+                        statePath: 'profile.info'
+                    },
+                    currentPage: {
+                        type: String,
+                        value: ''
+                    },
+                    rootPath: {
+                        type: String,
+                        value: ''
+                    },
+                    basic: {
+                        type: Object,
+                        statePath: 'profile.info.basic',
+                        value: {}
+                    },
+                };
+            }
+            constructor() {
+                super();
+            }
+
+            /**
+             * Use for one-time configuration of your component after local DOM is initialized. 
+             */
+            ready() {
+                super.ready();
+            }
+            // setMenu(e) {
+            //     this.set('currentPage', e.name)
+            // }
+            // _changePage(e) {
+            //     if (typeof this.info.id === 'undefined') {
+            //         Nylon.redirect('/register');
+            //     } else {
+            //         Nylon.redirect('/profile/' + e.model.item.name);
+            //     }
+
+            // }
+            openPage(e) {
+                let page = e.currentTarget.page
+                Nylon.redirect('/profile/' + page);
+                // console.log(page);
+            }
+        }
+
+        window.customElements.define(Page00.is, Page00);
+    </script>
+</dom-module>

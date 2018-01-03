@@ -1,0 +1,162 @@
+<link rel="import" href="../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../bower_components/app-layout/app-toolbar/app-toolbar.html">
+<link rel="import" href="../../../bower_components/iron-icons/iron-icons.html">
+
+<link rel="import" href="../../layout/flexbox-grid.html">
+<link rel="import" href="../../layout/shared-styles.html">
+<link rel="import" href="../../components/aqa-form/aqa-combo-box.html">
+<link rel="import" href="../../components/aqa-panel/aqa-panel.html">
+<link rel="import" href="../../components/aqa-button/aqa-button.html">
+<link rel="import" href="../../components/aqa-form/aqa-input.html">
+
+<link rel="import" href="../../components/aqa-title/aqa-title-name.html">
+
+<link rel="import" href="../../components/aqa-font/aqa-mitr-font.html">
+
+<link rel="import" href="../../mixins/common-mixin.html">
+<link rel="import" href="../../redux-mixin.html">
+<link rel="import" href="./components/address-form-contact.html">
+
+<link rel="import" href="../../redux/profile/page-02-redux.html">
+
+<dom-module id="page-address">
+    <template>
+        <style include="flexbox-grid shared-styles">
+            .section {
+                margin: 0.5rem;
+            }
+
+            .section-header {
+                margin-bottom: 1rem;
+                font-size: 1.2rem;
+            }
+            /* .section-content {
+                margin-left: 1.5rem;
+            } */
+
+            .white-space {
+                margin: 1rem;
+            }
+
+            h2 {
+                font-family: MitrRegular;
+                font-weight: normal;
+            }
+        </style>
+        <div class="page-container">
+            <!-- <h2>ที่อยู่ในการติดต่อ</h2> -->
+            <aqa-title-name></aqa-title-name>
+            <aqa-panel id="basic">
+                <app-toolbar slot="header">
+                    <div main-title>ที่จัดส่งเอกสาร</div>
+                </app-toolbar>
+                <div slot="content">
+                    <!-- <div class="section row">
+                        <div class="col-xs-12 section-header" style="margin:auto 0">
+                            <b>ที่จัดส่งเอกสาร</b>
+                            <hr>
+                        </div>
+                    </div> -->
+                    <div class="section-content">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6">
+                                <input type="radio" name="address" checked> ที่อยู่ที่สะดวกในการติดต่อ
+                                <input type="radio" name="address"> ที่อยู่ที่ทำงาน
+                                <!-- <aqa-combo-box label="สถานที่จัดส่งเอกสาร" items="[[address]]" item-label-path="label" item-value-path="value"></aqa-combo-box> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aqa-panel>
+            <div class="white-space"></div>
+            <aqa-panel id="basic">
+                <app-toolbar slot="header">
+                    <div main-title>ที่อยู่ที่ติดต่อได้สะดวก</div>
+                </app-toolbar>
+                <div slot="content">
+                    <!-- <div class="section row">
+                        <div class="col-xs-12 section-header">
+                            <b>ที่อยู่ที่ติดต่อได้สะดวก</b>
+                            <hr>
+                        </div>
+                    </div> -->
+                    <div class="section-content">
+                        <address-form-contact></address-form-contact>
+                    </div>
+                </div>
+            </aqa-panel>
+            <div class="white-space"></div>
+            <aqa-panel id="basic">
+                <app-toolbar slot="header">
+                    <div main-title>ที่ทำงาน </div>
+                </app-toolbar>
+                <div slot="content">
+                    <!-- <div class="section row">
+                        <div class="col-xs-12 section-header">
+                            <b>ที่ทำงาน</b>
+                            <aqa-button type="primary">คัดลอกจากที่อยู่ที่สะดวกในการติดต่อ</aqa-button>
+                            <hr>
+                        </div>
+                    </div> -->
+                    <div class="section-content">
+                        <p>
+                            <aqa-button type="primary">คัดลอกจากที่อยู่ที่สะดวกในการติดต่อ</aqa-button>
+                        </p>
+
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <aqa-input label="ชื่อองค์กร" value=""></aqa-input>
+                            </div>
+                        </div>
+                        <address-form-contact></address-form-contact>
+                    </div>
+
+                </div>
+            </aqa-panel>
+            <div class="white-space"></div>
+            <div class="row center-xs">
+                <div class="col-lg-2">
+                    <div style="padding:0rem 2rem;">
+                        <aqa-button type="success btn-full-width">บันทึก</aqa-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+    <script>
+        class PageAddress extends CommonMixin(ReduxMixin(Polymer.Element)) {
+            static get is() { return 'page-address'; }
+            static get properties() {
+                return {
+                    address: {
+                        type: Array,
+                        value: [
+                            {
+                                label: 'ที่อยู่ที่สะดวกในการติดต่อ',
+                                value: '01'
+                            },
+                            {
+                                label: 'ที่อยู่ที่ทำงาน',
+                                value: '02'
+                            }
+                        ]
+                    }
+                }
+            }
+            ready() {
+                super.ready();
+                // console.log(1111);
+                Polymer.RenderStatus.afterNextRender(this, function () {
+                    Nylon.dispatch('PROFILE_02_GET_LIST_REGION')
+                    // console.log(111);
+                    // Nylon.dispatch('PROFILE_01_GET_LIST_GENDER')
+                    // Nylon.dispatch('PROFILE_01_GET_LIST_NATIONALITY')
+                    // Nylon.dispatch('PROFILE_01_GET_LIST_RELIGION')
+                    // Nylon.dispatch('PROFILE_01_GET_LIST_WORK_STATUS')
+                    // Nylon.dispatch('REGISTER_CHECK_PERSON', localStorage.getItem('taxno'))
+                });
+            }
+        }
+        window.customElements.define(PageAddress.is, PageAddress);
+    </script>
+</dom-module>

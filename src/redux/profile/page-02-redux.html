@@ -1,0 +1,161 @@
+<script>
+    Nylon.addReducer('profile_page02', function (state, action) {
+        state = state || {
+            data: {},
+            region: [],
+            province: [],
+            amphoe: [],
+            district: [],
+        }
+
+        switch (action.type) {
+            case 'PROFILE_02_GET_LIST_REGION':
+                state.region = action.payload
+                return state
+            case 'PROFILE_02_GET_LIST_PROVINCE':
+                state.province = action.payload
+                return state
+            case 'PROFILE_02_GET_LIST_AMPHOE':
+                state.amphoe = action.payload
+                return state
+            case 'PROFILE_02_GET_LIST_DISTRICT':
+                state.district = action.payload
+                return state
+            default:
+                return state
+        }
+        return state
+    })
+
+
+    Nylon.addAction({
+        PROFILE_02_GET_LIST_REGION: function () {
+            return dispatch => {
+                axios.get('/region')
+                    .then(res => {
+                        dispatch({ type: 'PROFILE_02_GET_LIST_REGION', payload: res.data })
+                    }
+                    ).catch(err => {
+                        console.log({ err })
+                    })
+            }
+        },
+        PROFILE_02_GET_LIST_PROVINCE: function () {
+            return dispatch => {
+                axios.get('/province')
+                    .then(res => {
+                        // console.log(addressContract);
+                        dispatch({ type: 'PROFILE_02_GET_LIST_PROVINCE', payload: res.data })
+                    }
+                    ).catch(err => {
+                        console.log({ err })
+                    })
+            }
+        },
+
+        PROFILE_02_GET_LIST_AMPHOE: function () {
+            return dispatch => {
+                let res = {
+                    data: [
+                        {
+                            value: 1,
+                            label: 'อำเภอเมืองเชียงใหม่'
+                        },
+                        {
+                            value: 2,
+                            label: 'อำเภอเมืองขอนแก่น '
+                        },
+                        {
+                            value: 3,
+                            label: 'อำเภอเมืองกาญจนบุรี '
+                        },
+                        {
+                            value: 4,
+                            label: 'บางซื่อ'
+                        },
+                        {
+                            value: 5,
+                            label: 'อำเภอเมืองชลบุรี '
+                        },
+                        {
+                            value: 6,
+                            label: 'อำเภอเมืองกระบี่'
+                        }
+                    ]
+                }
+                dispatch({ type: 'PROFILE_02_GET_LIST_AMPHOE', payload: res.data })
+                // axios.get('/todolist').then(
+                //     res => {
+                //         progress(() => {
+                //             dispatch({ type: 'VIEW_2_GET_DATA', payload: res.data })
+                //         })
+                //     }
+                // )
+                //     .catch(
+                //     err => {
+                //         progress(() => {
+                //             console.log({ err })
+                //             Nylon.$['page-view2'].$.list.$.pc1.notify({
+                //                 status: 'error',
+                //                 msg: err.response.data.msg,
+                //                 position: 'top'
+                //             })
+                //         })
+                //     }
+                //     )
+            }
+        },
+        PROFILE_02_GET_LIST_DISTRICT: function () {
+            return dispatch => {
+                let res = {
+                    data: [
+                        {
+                            value: 1,
+                            label: 'เทศบาลตำบลบ้านหลวง'
+                        },
+                        {
+                            value: 2,
+                            label: 'เทศบาลตำบลน้ำพอง'
+                        },
+                        {
+                            value: 3,
+                            label: 'เทศบาลตำบลท่าขนุน'
+                        },
+                        {
+                            value: 4,
+                            label: 'ตลาดยอด'
+                        },
+                        {
+                            value: 5,
+                            label: 'เทศบาลตำบลบ้านบึง'
+                        },
+                        {
+                            value: 6,
+                            label: 'เทศบาลตำบลเกาะลันตาใหญ่'
+                        }]
+                }
+                dispatch({ type: 'PROFILE_02_GET_LIST_DISTRICT', payload: res.data })
+                // axios.get('/todolist').then(
+                //     res => {
+                //         progress(() => {
+                //             dispatch({ type: 'VIEW_2_GET_DATA', payload: res.data })
+                //         })
+                //     }
+                // )
+                //     .catch(
+                //     err => {
+                //         progress(() => {
+                //             console.log({ err })
+                //             Nylon.$['page-view2'].$.list.$.pc1.notify({
+                //                 status: 'error',
+                //                 msg: err.response.data.msg,
+                //                 position: 'top'
+                //             })
+                //         })
+                //     }
+                //     )
+            }
+        }
+    })
+
+</script>

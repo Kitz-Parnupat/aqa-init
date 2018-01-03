@@ -1,0 +1,67 @@
+<script>
+    Nylon.addReducer('approve', function (state, action) {
+        state = state || {
+            assessor: [],
+            meeting: []
+        }
+
+        switch (action.type) {
+            case 'APPROVE_GET_LISTS':
+                state.assessor = action.data
+                return state
+            case 'APPROVE_GET_MEETING':
+                state.meeting = action.data
+                return state
+            default:
+                return state
+        }
+        return state
+    })
+
+
+    Nylon.addAction({
+        APPROVE_GET_LISTS: function () {
+            return dispatch =>
+                axios.get('/profile/approve?approve=false').then(
+                    res => {
+                        dispatch({ type: 'APPROVE_GET_LISTS', data: res.data })
+                    }
+                )
+        },
+        APPROVE_GET_MEETING: function (data) {
+            return dispatch => {
+                axios.get('/profile/meeting?' + data)
+                    .then(res => {
+                        // console.log(res.data)
+                        dispatch({ type: 'APPROVE_GET_MEETING', data: res.data })
+                    })
+                    .catch(err => {
+                        console.log({ err })
+                    })
+            }
+        },
+        APPROVE_GET_PROPERTY: function (id) {
+            // console.log(id)
+            localStorage.removeItem("taxno")
+            localStorage.setItem("taxno",id)
+            return dispatch => {
+                axios.get('profile?id=' + id).then(
+                    res => {
+                        Nylon.dispatch('PROFILE_LOGIN', res.data)
+                    }
+                )
+            }
+        },
+        // APPROVE_GET_CARD: function (id) {
+        //         // console.log(id)
+        //         return dispatch => {
+        //             axios.get('profile/card?id=' + id).then(
+        //                 res => {
+        //                     // Nylon.dispatch('PROFILE_LOGIN', res.data)
+        //                 }
+        //             )
+        //         }
+        // }
+    })
+
+</script>

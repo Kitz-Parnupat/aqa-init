@@ -1,0 +1,58 @@
+<script>
+    Nylon.addReducer('dashboard', function (state, action) {
+        state = state || {}
+
+        switch (action.type) {
+            case 'DASHBOARD_GET_EXPENSES':
+                state.expenses = action.data
+                return state
+            case 'DASHBOARD_GET_PARTICIPANT':
+                state.participant = action.data
+            default:
+                return state
+        }
+        return state
+    })
+
+
+    Nylon.addAction({
+        DASHBOARD_GET_EXPENSES: function (id) {
+
+
+            return dispatch => {
+
+                if (id) {
+                    // console.log('user')
+                    axios.get(`/group/expenses/joinexp?id=${id}`).then(
+                        res => {
+                            dispatch({ type: 'DASHBOARD_GET_EXPENSES', data: res.data })
+                        }
+                    )
+                }
+                else {
+                    // console.log('admin')
+                    axios.get('/group/expenses/joinexp').then(
+                        res => {
+                            dispatch({ type: 'DASHBOARD_GET_EXPENSES', data: res.data })
+                        }
+                    )
+                }
+            }
+
+        },
+        DASHBOARD_GET_PARTICIPANT: function () {
+            return dispatch => {
+                    axios.get(`/participant/year`).then(
+                        res => {
+                            dispatch({ type: 'DASHBOARD_GET_PARTICIPANT', data: res.data })
+                        }
+                    )
+            }
+
+        },
+
+
+
+    })
+
+</script>

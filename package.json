@@ -1,0 +1,34 @@
+{
+  "name": "polymer-starter-kit",
+  "license": "BSD-3-Clause",
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "eslint-config-google": "^0.7.0",
+    "eslint-plugin-html": "^2.0.0",
+    "npm-run-all": "^4.0.2"
+  },
+  "scripts": {
+    "lint": "npm run lint:javascript",
+    "lint:javascript": "eslint . --ext js,html --ignore-path .gitignore",
+    "test": "polymer test",
+    "test:integration": "polymer build # test that psk builds without error with the CLI",
+    "backend": "cd backend && nylon-cli serve",
+    "polymer:dev": "polymer serve --port 8080 --hostname 0.0.0.0",
+    "polymer:dist": "polymer serve build/default --port 8081",
+    "dev": "npm-run-all --parallel backend polymer:dev",
+    "dist": "npm-run-all --parallel backend polymer:dist",
+    "build:dev": "polymer build",
+    "aqa": "node prpl-server.js"
+  },
+  "dependencies": {
+    "express": "^4.16.2",
+    "jsonwebtoken": "^8.0.1",
+    "multiparty": "^4.1.3",
+    "numeral": "^2.0.6",
+    "prpl-server": "^0.10.2",
+    "redux": "^3.7.1",
+    "redux-thunk": "^2.2.0",
+    "sha1": "^1.1.1",
+    "xlsx": "^0.11.3"
+  }
+}

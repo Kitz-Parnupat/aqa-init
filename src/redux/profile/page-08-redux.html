@@ -1,0 +1,34 @@
+<script>
+    Nylon.addReducer('profile08', function (state, action) {
+        state = state || {
+            typeResearch: [],
+
+        }
+
+        switch (action.type) {
+            case 'PROFILE_08_GET_LIST_TYPE_RESEARCH':
+                state.typeResearch = action.payload
+                return state
+            default:
+                return state
+        }
+        return state
+    })
+
+    Nylon.addAction({
+        PROFILE_08_GET_LIST_TYPE_RESEARCH: function () {
+            return dispatch => {
+                axios.get('/type/research')
+                    .then(res => {
+                        dispatch({ type: 'PROFILE_08_GET_LIST_TYPE_RESEARCH', payload: res.data })
+                    })
+                    .catch(err => {
+                        console.log({ err })
+                    })
+            }
+        },
+
+
+    })
+
+</script>

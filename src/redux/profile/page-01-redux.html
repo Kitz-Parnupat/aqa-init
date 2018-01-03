@@ -1,0 +1,119 @@
+<script>
+    Nylon.addReducer('profile_page01', function (state, action) {
+        state = state || {
+            data: {},
+            academicPosition: [],
+            gender: [],
+            religion: [],
+            nationality: [],
+            workStatus: [],
+
+        }
+
+        switch (action.type) {
+            case 'PROFILE_01_GET_LIST_ACADAMIC_POSITION':
+                state.academicPosition = action.payload
+                return state
+            case 'PROFILE_01_GET_LIST_GENDER':
+                state.gender = action.payload
+                return state
+            case 'PROFILE_01_GET_LIST_NATIONALITY':
+                state.nationality = action.payload
+                return state
+            case 'PROFILE_01_GET_LIST_RELIGION':
+                state.religion = action.payload
+                return state
+            case 'PROFILE_01_GET_LIST_WORK_STATUS':
+                state.workStatus = action.payload
+                return state
+            default:
+                return state
+        }
+        return state
+    })
+
+    Nylon.addAction({
+        PROFILE_01_GET_LIST_ACADAMIC_POSITION: function () {
+            return dispatch => {
+                axios.get('/academic/position')
+                    .then(res => {
+                        dispatch({ type: 'PROFILE_01_GET_LIST_ACADAMIC_POSITION', payload: res.data })
+                    }
+                    ).catch(err => {
+                        console.log({ err })
+                    })
+            }
+        },
+        PROFILE_01_GET_LIST_GENDER: function () {
+            return dispatch => {
+                axios.get('/gender')
+                    .then(res => {
+                        dispatch({ type: 'PROFILE_01_GET_LIST_GENDER', payload: res.data })
+                    }
+                    ).catch(err => {
+                        console.log({ err })
+                    })
+
+            }
+        },
+        PROFILE_01_GET_LIST_NATIONALITY: function () {
+            return dispatch => {
+                axios.get('/nationality')
+                    .then(res => {
+                        dispatch({ type: 'PROFILE_01_GET_LIST_NATIONALITY', payload: res.data })
+                    }
+                    ).catch(err => {
+                        console.log({ err })
+                    })
+
+            }
+        },
+        PROFILE_01_GET_LIST_RELIGION: function () {
+            return dispatch => {
+                axios.get('/religion')
+                    .then(res => {
+                        dispatch({ type: 'PROFILE_01_GET_LIST_RELIGION', payload: res.data })
+                    }
+                    ).catch(err => {
+                        console.log({ err })
+                    })
+
+            }
+        },
+        PROFILE_01_GET_LIST_WORK_STATUS: function () {
+            return dispatch => {
+                axios.get('/workstatus')
+                    .then(res => {
+                        dispatch({ type: 'PROFILE_01_GET_LIST_WORK_STATUS', payload: res.data })
+                    }
+                    ).catch(err => {
+                        console.log({ err })
+                    })
+            }
+        },
+        // POST
+        PROFILE_01_POST_PICTURE: function (dataPic,profile) {
+            // console.log(dataPic);
+            var data = new FormData()
+            data.append('file', dataPic[0])
+            
+            // console.log(data);
+            return dispatch => {
+                axios.defaults.headers.common['pic_type'] = profile.pic_type
+                axios.defaults.headers.common['user_id'] = profile.user_id
+                axios.post('/upload/uploadpic',data)
+                    .then(res => {
+                        if (res.status === 200) {
+                            Nylon.toast('update')
+                        }
+                        // dispatch({ type: 'PROFILE_01_GET_LIST_WORK_STATUS', payload: res.data })
+                    }
+                    ).catch(err => {
+                        console.log({ err })
+                    })
+            }
+        },
+
+    })
+
+</script>

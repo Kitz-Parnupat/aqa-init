@@ -1,0 +1,138 @@
+<link rel="import" href="../../../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../../../bower_components/lazy-imports/lazy-imports-mixin.html">
+<link rel="import" href="../../../../bower_components/paper-progress/paper-progress.html">
+<link rel="import" href="../../../../bower_components/iron-icon/iron-icon.html">
+
+<link rel="import" href="../../../../bower_components/polymer/lib/utils/debounce.html">
+
+<link rel="import" href="../../../redux/profile/profile-redux.html">
+<link rel="import" href="../../../layout/flexbox-grid.html">
+<link rel="import" href="../../../my-icons.html">
+<link rel="import" href="../../../redux-mixin.html">
+
+<dom-module id="page-list">
+    <!-- <link rel="lazy-import" group="page-00" href="./page-00.html"> -->
+    <link rel="lazy-import" group="page-01" href="./page-01.html">
+    <link rel="lazy-import" group="page-02" href="./page-02.html">
+    <link rel="lazy-import" group="page-03" href="./page-03.html">
+    <link rel="lazy-import" group="page-04" href="./page-04.html">
+    <link rel="lazy-import" group="page-05" href="./page-05.html">
+    <link rel="lazy-import" group="page-06" href="./page-06.html">
+    <link rel="lazy-import" group="page-07" href="./page-07.html">
+    <link rel="lazy-import" group="page-08" href="./page-08.html">
+    <link rel="lazy-import" group="page-09" href="./page-09.html">
+    <link rel="lazy-import" group="page-10" href="./page-10.html">
+    <link rel="lazy-import" group="page-11" href="./page-11.html">
+    <link rel="lazy-import" group="page-12" href="./page-12.html">
+    <link rel="lazy-import" group="page-13" href="./page-13.html">
+
+
+
+    <template>
+        <style include="flexbox-grid flexbox-grid-remove-padding">
+            paper-progress {
+                width: 100%;
+            }
+
+            #icon-load {
+                top: 30%;
+                width: 10em;
+                height: 10em;
+                color: #BDBDBD;
+            }
+        </style>
+        <!-- {{checkStyle(setShow)}}
+        <paper-progress hidden={{setShow}} indeterminate class="red"></paper-progress>
+        <div class="row middle-md  center-md" id='loader'>
+            <iron-icon id="icon-load" icon="view-list"></iron-icon>
+        </div> -->
+        <iron-pages selected="{{selected}}" attr-for-selected="name" selected-item="{{itemChanged}}" id="ironPageMenu">
+            <page-01 name="ข้อมูลพื้นฐาน"></page-01>
+            <page-02 name="ที่อยู่ในการติดต่อ"></page-02>
+            <page-03 name="วุฒิการศึกษา"></page-03>
+            <page-04 name="สาขาเชี่ยวชาญ"></page-04>
+            <page-05 name="ประวัติการทำงาน"></page-05>
+            <page-06 name="ความสามารถอื่นๆ"></page-06>
+            <page-07 name="ประวัติการประเมิน"></page-07>
+            <page-08 name="ผลงานทางวิชาการ"></page-08>
+            <page-09 name="ประวัติการอบรมประกันคุณภาพภายใน"></page-09>
+            <page-10 name="บัญชีธนาคาร"></page-10>
+            <page-11 name="ภาคที่สะดวกในการประเมิน"></page-11>
+            <page-12 name="บุคคลอ้างอิง"></page-12>
+            <page-13 name="ไฟล์เอกสาร"></page-13>
+        </iron-pages>
+    </template>
+
+    <script>
+        class PageList extends ReduxMixin(Polymer.LazyImportsMixin(Polymer.Element)) {
+            static get is() {
+                return 'page-list';
+            }
+            static get properties() {
+                return {
+                    selected: {
+                        type: String
+                    },
+                    itemChanged: {
+                        type: String,
+                        observer: '_itemChanged'
+                    },
+                    listMenu: {
+                        type: Array,
+                        statePath: 'profile.menu',
+                        // observer: '_listMenu'
+                    },
+                    setShow: {
+                        type: Boolean,
+                        value: true
+                    }
+                };
+
+
+            }
+            _itemChanged(el) {
+                if (!el)
+                    return
+                this.set('setShow', false)
+
+                // this._debouncer = Polymer.Debouncer.debounce(
+                //     this._debouncer, // initially undefined
+                //     Polymer.Async.timeOut.after(300),
+                //     () => {
+                this.importLazyGroup(el.localName).then(results => {
+                    // console.log(results);
+                    this.dispatchEvent(new CustomEvent('import-loaded', results));
+                    this.set('setShow', true)
+                    //         })
+                })
+            }
+            constructor() {
+                super();
+            }
+
+            ready() {
+                super.ready();
+            }
+            // checkStyle(setShow) {
+            //     if (setShow) {
+            //         this.$.loader.style = 'display: none;'
+            //     } else {
+            //         this.$.loader.style = 'display: block;'
+            //     }
+            // }
+            // _listMenu() {
+            //     for (var i = 0; i < this.listMenu.length; i++) {
+            //         var newElement = document.createElement(this.listMenu[i]['component']);
+            //         var newAttr = document.createAttribute('name');
+            //         newAttr.value = this.listMenu[i]['name'];
+            //         newElement.setAttributeNode(newAttr);
+            //         Polymer.dom(this.$.ironPageMenu).appendChild(newElement);
+            //     }
+            // }
+
+        }
+
+        window.customElements.define(PageList.is, PageList);
+    </script>
+</dom-module>

@@ -1,0 +1,95 @@
+<script>
+    Nylon.addReducer('register', function (state, action) {
+        state = state || {
+            typeAssessor: [],
+            isCard: false,
+            info: {}
+        }
+
+        switch (action.type) {
+            case 'REGISTER_GET_TYPE_ASSESSOR':
+                state.typeAssessor = action.payload
+                return state
+            case 'REGISTER_INFO':
+                state.isCard = action.isCard;
+                state.info = action.info;
+                return state;
+            default:
+                return state
+        }
+        return state
+    })
+
+
+    Nylon.addAction({
+        REGISTER_GET_TYPE_ASSESSOR: function () {
+            return dispatch =>
+                axios.get('/type/assessor').then(
+                    res => {
+                        dispatch({ type: 'REGISTER_GET_TYPE_ASSESSOR', payload: res.data })
+                    }
+                )
+        },
+        REGISTER_CHECK_TAXNO: function (taxno, callback) {
+            return dispatch =>
+                axios.get('/register/check?taxno=' + taxno).then(
+                    res => {
+                        callback(res.data);
+                        // console.log(res.data.length)
+                    }
+
+                )
+        },
+        REGISTER_POST: function (data,pathUrl) {
+            // console.log('yyyy');
+            // console.log(data);
+            // var progress = Nylon.$['page-register'].$.panelCard.progress({ position: 'top' })
+            return dispatch =>
+                axios.post('/register', data).then(
+                    res => {
+                        res.data.pathUrl = pathUrl || '/profile/ข้อมูลพื้นฐาน'
+                        // console.log('xxxxxxx');
+                        Nylon.dispatch('PROFILE_LOGIN', res.data)
+                        // progress(() => {
+                        //     Nylon.dispatch('PROFILE_LOGIN', res.data)
+                        // })
+                    }
+                )
+        },
+        REGISTER_READER_CARD: function (callback) {
+            return dispatch =>
+                axios.get('http://127.0.0.1:1119/info?p=0').then(
+                    res => {
+                        if (res.data.Data.cardInfo.cardId) {
+                            let data = res.data.Data.cardInfo;
+                            let hbd = [Number(data.cardBOD.substring(0, 4)) - 543, data.cardBOD.substring(4, 6), data.cardBOD.substring(6, 8)].join('-');
+                            let exp = [Number(data.cardExpDate.substring(0, 4)) - 543, data.cardExpDate.substring(4, 6), data.cardExpDate.substring(6, 8)].join('-');
+                            let issue = [Number(data.cardIssueDate.substring(0, 4)) - 543, data.cardIssueDate.substring(4, 6), data.cardIssueDate.substring(6, 8)].join('-');
+                            let info = {
+                                prefix_th: data.cardNameTh.split(' ')[0],
+                                firstname_th: data.cardNameTh.split(' ')[1].split('  ')[0],
+                                lastname_th: data.cardNameTh.split('  ')[1],
+                                prefix_en: data.cardName.split(' ')[0],
+                                firstname_en: data.cardName.split(' ')[1].split('  ')[0],
+                                lastname_en: data.cardName.split('  ')[1],
+                                birth_date: new Date(hbd + 'T00:00:00+07:00').toISOString(),
+                                issue_date: new Date(issue + 'T00:00:00+07:00').toISOString(),
+                                expire_date: new Date(exp + 'T00:00:00+07:00').toISOString(),
+                                gender_id: (data.cardSex == "ชาย" ? 1 : 2),
+                                card_id: data.cardId
+                            };
+                            dispatch({ type: 'REGISTER_INFO', isCard: true, info: info })
+                            callback(info);
+                        } else {
+                            dispatch({ type: 'REGISTER_INFO', isCard: false, info: {} })
+                            callback(false);
+                        }
+                    }
+                ).catch(err => {
+                    dispatch({ type: 'REGISTER_INFO', isCard: false, info: {} })
+                    callback(false);
+                })
+        }
+    })
+
+</script>

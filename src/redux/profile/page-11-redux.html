@@ -1,0 +1,49 @@
+<script>
+    Nylon.addReducer('profile_page11', function (state, action) {
+        state = state || {
+            data: {},
+            region: [],
+            provinceContract: []
+        }
+
+        switch (action.type) {
+            case 'PROFILE_11_GET_LIST_REGION':
+                state.region = action.payload
+                return state
+            case 'PROFILE_11_GET_LIST_PROVINCE':
+                state.provinceContract = action.payload
+                return state
+            default:
+                return state
+        }
+        return state
+    })
+
+
+    Nylon.addAction({
+        PROFILE_11_GET_LIST_REGION: function () {
+            return dispatch => {
+                axios.get('/region')
+                    .then(res => {
+                        dispatch({ type: 'PROFILE_11_GET_LIST_REGION', payload: res.data })
+                    }
+                    ).catch(err => {
+                        console.log({ err })
+                    })
+            }
+        },
+        PROFILE_11_GET_LIST_PROVINCE: function (region_id) {
+            return dispatch => {
+                axios.get('/province?region_id='+ region_id)
+                    .then(res => {
+                        dispatch({ type: 'PROFILE_11_GET_LIST_PROVINCE', payload: res.data })
+                    }
+                    ).catch(err => {
+                        console.log({ err })
+                    })
+            }
+        },
+
+    })
+
+</script>
