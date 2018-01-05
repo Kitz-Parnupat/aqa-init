@@ -13,7 +13,7 @@
 <link rel="import" href="./nylon-init.html">
 <link rel="import" href="./layout/shared-styles.html">
 
-<link rel="import" href="./redux/auth-redux.html">
+<!-- <link rel="import" href="./redux/auth-redux.html"> -->
 
 <dom-module id="nylon-app">
   <template>
@@ -97,7 +97,7 @@
               np.pass()
           } else {
             if (localStorage.token) {
-              Nylon.dispatch('authVerifyToken')
+              // Nylon.dispatch('authVerifyToken')
 
               np.pass()
 
