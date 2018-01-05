@@ -11,9 +11,9 @@ var config = {
       max: 10,
       servers: [
         // { host: 'rdb.codeunbug.com', port: 28015, user: 'admin', password: 'next@2017' }
-        {host: '192.168.10.15', port: 28015}
+        {host: 'localhost', port: 28015}
       ],
-      db: 'aqa_expert'
+      db: 'aqa_self_learning'
     },
 
     oauth: {

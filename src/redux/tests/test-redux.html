@@ -1,0 +1,29 @@
+<script>
+    Nylon.addReducer('tests', function (state, action) {
+        state = state || {
+            list: [],
+        }
+
+        switch (action.type) {
+            case 'TEST_REDUX':
+                state.list = action.payload
+                return state
+            default:
+                return state
+        }
+        return state
+    })
+
+
+    Nylon.addAction({
+        TEST_REDUX: function () {
+            return dispatch =>
+                axios.get('/bank')
+                .then(res => {
+                        dispatch({ type: 'TEST_REDUX', payload: res.data })
+                    }
+                )
+        }
+    })
+
+</script>
