@@ -1,6 +1,8 @@
 <link rel="import" href="../../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../redux/tests/test-redux.html">
+ <link rel="import" href="../../../bower_components/aqa-button/aqa-button.html"> 
+<link rel="import" href="../../redux/tests/test-redux.html"> 
 <link rel="import" href="../../redux-mixin.html">
+
 
 <dom-module id="page-tests">
     <template>
@@ -12,6 +14,7 @@
         </style>
         <div class="page-container">
             <button on-click="getData">Test</button>
+            <aqa-button type="primary">Click</aqa-button>
             <template is="dom-repeat" items="[[list]]">
                 <div>[[item.id]]</div>
             </template>
