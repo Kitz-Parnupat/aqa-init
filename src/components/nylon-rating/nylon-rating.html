@@ -94,41 +94,7 @@
         </style>
 
         <fieldset class="rating">
-            <!-- <input type="radio" id="star5" name="rating-[[name]]" value="5" />
-            <label class="full" for="star5" on-mouseover="showText" on-mouseout="clearText" on-click="setText" title="มากที่สุด">
-                <div class="avartar">
-                    <div>5</div>
-                </div>
-            </label>
-
-            <input type="radio" id="star4" name="rating-[[name]]" value="4" />
-            <label class="full section" for="star4" on-mouseover="showText" on-mouseout="clearText" on-click="setText" title="มาก">
-                 <div class="avartar">
-                    <div>4</div>
-                </div>
-            </label>  -->
-            <!-- <input type="radio" id$="star[[name]]3" name$="rating-[[name]]" value="3" />
-            <label class="full section" for$="star[[name]]3" on-mouseover="showText" on-mouseout="clearText" on-click="setText" title="ดีมาก (Excellent)">
-                <div class="avartar">
-                    <div>3</div>
-                </div>
-            </label>
-
-            <input type="radio" id$="star[[name]]2" name$="rating-[[name]]" value="2" />
-            <label class="full section" for$="star[[name]]2" on-mouseover="showText" on-mouseout="clearText" on-click="setText" title="ดี (Good)">
-                <div class="avartar">
-                    <div>2</div>
-                </div>
-            </label>
-
-            <input type="radio" id$="star[[name]]1" name$="rating-[[name]]" value="1" />
-            <label class="full section" for$="star[[name]]1" on-mouseover="showText" on-mouseout="clearText" on-click="setText" title="พอใช้ (Fair)">
-                <div class="avartar">
-                    <div>1</div>
-                </div>
-            </label> -->
-            <template is="dom-repeat" items="[[itemreverse(items)]]">
-                   
+            <template is="dom-repeat" items="[[itemreverse(items)]]"> 
                 <input type="radio" id$="star[[name]][[item.pointer]]" name$="rating-[[name]]" checked$="[[selectedValue(item.pointer,item.label)]]"
                     value="[[item.value]]" on-tap="setValue" disabled="[[disabled]]"/>
                 <label class="full section" for$="star[[name]][[item.pointer]]" on-mouseover="showText" on-mouseout="clearText" on-click="setText"
